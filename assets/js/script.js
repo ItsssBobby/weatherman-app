@@ -46,3 +46,52 @@ function searchCity(city) {
             console.error('Error:', error);
         });
 }
+
+function displayForecast(forecastData) {
+    forecastCards.innerHTML = '';
+    forecastData.forEach(day => {
+        const forecastCard = document.createElement('div');
+        forecastCard.className = 'forecast-card';
+
+        const date = document.createElement('h3');
+        date.textContent = new Date(day.dt * 1000).toLocaleDateString();
+
+        const icon = document.createElement('img');
+        icon.src = `https://openweathermap.org/img/wn/${day.weather[0].icon}.png`;
+
+        const temp = document.createElement('p');
+        temp.textContent = `Temperature: ${day.main.temp} °F`;
+
+        const wind = document.createElement('p');
+        wind.textContent = `Wind Speed: ${day.wind.speed} MPH`;
+
+        const hum = document.createElement('p');
+        hum.textContent = `Humidity: ${day.main.humidity}%`;
+
+        forecastCard.append(date, icon, temp, wind, hum);
+        forecastCards.appendChild(forecastCard);
+    });
+}
+
+function addToSearchHistory(city) {
+    let searchHistory = JSON.parse(localStorage.getItem('searchHistory')) || [];
+
+    // Check if the city is already in the search history
+    if (searchHistory.includes(city)) {
+        return;
+    }
+
+    const listItem = document.createElement('li');
+    listItem.textContent = city;
+    searchHistoryList.appendChild(listItem);
+
+    searchHistory.push(city);
+    localStorage.setItem('searchHistory', JSON.stringify(searchHistory));
+}
+
+function loadSearchHistory() {
+    let searchHistory = JSON.parse(localStorage.getItem('searchHistory')) || [];
+    searchHistory.forEach(city => addToSearchHistory(city));
+}
+
+loadSearchHistory();
