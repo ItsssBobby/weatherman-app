@@ -73,6 +73,12 @@ function displayForecast(forecastData) {
     });
 }
 
+function createAndAppendListItem(city) {
+    const listItem = document.createElement('li');
+    listItem.textContent = city;
+    searchHistoryList.appendChild(listItem);
+}
+
 function addToSearchHistory(city) {
     let searchHistory = JSON.parse(localStorage.getItem('searchHistory')) || [];
 
@@ -81,9 +87,7 @@ function addToSearchHistory(city) {
         return;
     }
 
-    const listItem = document.createElement('li');
-    listItem.textContent = city;
-    searchHistoryList.appendChild(listItem);
+    createAndAppendListItem(city);
 
     searchHistory.push(city);
     localStorage.setItem('searchHistory', JSON.stringify(searchHistory));
@@ -91,7 +95,7 @@ function addToSearchHistory(city) {
 
 function loadSearchHistory() {
     let searchHistory = JSON.parse(localStorage.getItem('searchHistory')) || [];
-    searchHistory.forEach(city => addToSearchHistory(city));
+    searchHistory.forEach(city => createAndAppendListItem(city));
 }
 
 loadSearchHistory();
